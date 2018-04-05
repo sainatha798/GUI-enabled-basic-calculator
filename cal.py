@@ -7,7 +7,9 @@ class Calc():
 		"""Constructor method"""
 		master.title('Calulator') 
 		master.geometry()
+		master.bind('<Return>',self.value)
 		self.expression = Entry(master)
+		self.expression.bind('<Return>',self.value)
 		self.expression.grid(row=0,column=0,columnspan=9,pady=1)
 		self.expression.focus_set() #Sets focus on the input text area
 
@@ -36,13 +38,16 @@ class Calc():
 		Button(master,text=".",width=3,command=lambda:self.action('.')).grid(row=4, column=1)
 		Button(master,text="(",width=3,command=lambda:self.action('(')).grid(row=2, column=4)
 		Button(master,text=")",width=3,command=lambda:self.action(')')).grid(row=2, column=5)
-		Button(master,text="√",width=3,command=lambda:self.squareroot()).grid(row=3, column=4)
+		Button(master,text="√",width=3,command=lambda:self.action('sqrt')).grid(row=3, column=4)
 		Button(master,text="x^n",width=3,command=lambda:self.action('^')).grid(row=3, column=5)
 
+	def value(self,event):
+		self.equals()
 
 	def equals(self):
 		try:
-			out = sympy.sympify(self.expression.get())
+			out = float(sympy.sympify(self.expression.get()))
+
 			if out=='zoo':
 				raise Exception
 			self.expression.delete(0,END)
